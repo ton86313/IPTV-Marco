@@ -52,7 +52,7 @@ def update_m3u():
 
   print(f"พบลิงก์สดใหม่: {new_url}")
 
-  # สร้างเนื้อหาไฟล์ M3U โดยใช้รูปแบบหัวข้อของคุณเป๊ะๆ
+  # เขียนโครงสร้างไฟล์ M3U ลงใน IPTV-Marco.m3u โดยใช้โลโก้เดิมที่มีอยู่แล้ว
   m3u_content = f"""#EXTM3U
 #EXTINF:-1 group-title="คลิป" tvg-logo="https://static.scdn.st/027e12ae-683b-4e42-950f-2b3f12448931/thumbs/cc0433e0-c396-4305-8c92-1f792ef9803f.png",cy-102
 {new_url}
