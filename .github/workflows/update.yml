@@ -2,9 +2,7 @@ name: Auto Update IPTV Playlist
 
 on:
   schedule:
-    # ตั้งเวลาให้รันอัตโนมัติทุกๆ 2 ชั่วโมง
     - cron: '0 */2 * * *'
-  # ปุ่มสำหรับกดสั่งรันทดสอบด้วยมือ
   workflow_dispatch:
 
 jobs:
@@ -13,13 +11,13 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
+      - name: Checkout only workflow and script (Clean run)
         uses: actions/checkout@v4
         with:
-          # โหลดทุกอย่างตามปกติ แต่สั่งข้ามโฟลเดอร์ posters_5min ที่ชื่อยาวเกินไป
+          # ดึงมาแค่ไฟล์ .yml และสคริปต์ Python เท่านั้น จะได้ไม่ไปโดนโฟลเดอร์รูปภาพ
           sparse-checkout: |
-            *
-            !posters_5min/
+            .github/workflows/update.yml
+            update_playlist.py
           sparse-checkout-cone-mode: false
 
       - name: Set up Python
@@ -33,9 +31,10 @@ jobs:
       - name: Run updater script
         run: python update_playlist.py
 
-      - name: Commit and push if changed
+      - name: Commit and push IPTV-Marco.m3u
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
           git add IPTV-Marco.m3u
-          git diff --quiet IPTV-Marco.m3u || (git commit -m "Auto-update cy-102 link" && git push)
+          git commit -m "Auto-update cy-102 link" || echo "No changes to commit"
+          git push
