@@ -13,14 +13,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository without sparse-checkout issues
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          # สั่งให้ดึงมาเฉพาะไฟล์สคริปต์และไฟล์ m3u ข้ามโฟลเดอร์รูปภาพไปเลย
-          sparse-checkout: |
-            update_playlist.py
-            IPTV-Marco.m3u
-          sparse-checkout-cone-mode: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -37,5 +31,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
+          # สั่งให้อัปเดตเฉพาะไฟล์ m3u โดยไม่สนใจไฟล์รูปภาพชื่อยาวๆ ที่เหลือ
           git add IPTV-Marco.m3u
           git diff --quiet IPTV-Marco.m3u || (git commit -m "Auto-update cy-102 link" && git push)
