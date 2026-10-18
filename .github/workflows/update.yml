@@ -11,14 +11,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout only workflow and script (Clean run)
+      - name: Checkout repository completely
         uses: actions/checkout@v4
         with:
-          # ดึงมาแค่ไฟล์ .yml และสคริปต์ Python เท่านั้น จะได้ไม่ไปโดนโฟลเดอร์รูปภาพ
-          sparse-checkout: |
-            .github/workflows/update.yml
-            update_playlist.py
-          sparse-checkout-cone-mode: false
+          # ปิดการใช้งานตัวตรวจสอบชื่อไฟล์ยาวของ git บน Linux ชั่วคราว
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,6 +25,10 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
+      - name: Configure Git to ignore long paths
+        run: |
+          git config --global core.longpaths true
+
       - name: Run updater script
         run: python update_playlist.py
 
@@ -36,5 +37,4 @@ jobs:
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
           git add IPTV-Marco.m3u
-          git commit -m "Auto-update cy-102 link" || echo "No changes to commit"
-          git push
+          git diff --quiet IPTV-Marco.m3u || (git commit -m "Auto-update cy-102 link" && git push)
