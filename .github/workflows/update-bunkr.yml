@@ -3,7 +3,7 @@ name: Update Bunkr M3U links
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "23 * * * *"
   workflow_dispatch:
 
 permissions:
