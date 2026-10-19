@@ -18,8 +18,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout required files only
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /IPTV-Marco.m3u
+            /bunkr_sources.json
+            /update_bunkr_m3u.py
+          sparse-checkout-cone-mode: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
