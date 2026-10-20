@@ -1,4 +1,4 @@
-# Refresh scheduled workflow
+# Refresh scheduled workflow - v2
 name: Update Bunkr M3U links
 
 on:
